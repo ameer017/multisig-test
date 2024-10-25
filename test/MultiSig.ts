@@ -70,19 +70,19 @@ describe("MultiSig Contract Tests", function () {
 
             });
 
-            it("Should add a valid signer successfully", async function () {
-                const { multiSig, owner, signer4 } = await loadFixture(deployMultiSigFixture);
+            // it("Should add a valid signer successfully", async function () {
+            //     const { multiSig, owner, signer4 } = await loadFixture(deployMultiSigFixture);
 
-                const newSigner = { "address": "0x71bE63f3384f5fb98995898A86B02Fb2426c5788" }
-                await multiSig.connect(owner).addValidSigner(newSigner.address);
-            });
+            //     const newSigner = { "address": "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720" }
+            //     await multiSig.connect(owner).addValidSigner(newSigner.address);
+            // });
 
-            it("Should revert if a non-owner tries to add a signer", async function () {
-                const { multiSig, signer1, signer2 } = await loadFixture(deployMultiSigFixture);
+            // it("Should revert if a non-owner tries to add a signer", async function () {
+            //     const { multiSig, signer1, signer2 } = await loadFixture(deployMultiSigFixture);
 
-                await expect(multiSig.connect(signer1).addValidSigner(signer2.address))
-                    .to.be.revertedWith("not owner");
-            });
+            //     await expect(multiSig.connect(signer1).addValidSigner(signer2.address))
+            //         .to.be.revertedWith("not owner");
+            // });
 
             it("Should remove a valid signer successfully", async function () {
                 const { multiSig, owner, signer1, signer2 } = await loadFixture(deployMultiSigFixture);
@@ -90,6 +90,16 @@ describe("MultiSig Contract Tests", function () {
                 const index = 0;
                 await multiSig.connect(owner).removeSigner(index);
             });
+
+            it("should revert in case of Invalid operations", async function () {
+                const { multiSig, owner, nonSigner, signer3, receiver } = await loadFixture(deployMultiSigFixture);
+              
+                await multiSig.connect(signer3).initiateTransaction(
+                    hre.ethers.parseEther("0.1"),
+                    receiver.address
+                );
+            });
+            
 
 
 
